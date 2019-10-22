@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Simple RoomDatabase Example</string>
+    <string name="tasks">Tasks</string>
+    <string name="add_task">Add Task</string>
+</resources>
