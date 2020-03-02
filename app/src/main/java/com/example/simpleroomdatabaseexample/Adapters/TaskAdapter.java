@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpleroomdatabaseexample.Activities.MainActivity;
 import com.example.simpleroomdatabaseexample.Entity.Task;
+import com.example.simpleroomdatabaseexample.Interface.RecyclerViewClickListener;
 import com.example.simpleroomdatabaseexample.R;
 
 import java.util.List;
@@ -19,9 +20,12 @@ import java.util.List;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
     private Context mContext;
     private List<Task> tasks;
-    public TaskAdapter(MainActivity mainActivity, List<Task> tasks) {
-        this.mContext = mainActivity;
+    private RecyclerViewClickListener recyclerViewClickListener;
+
+    public TaskAdapter(Context mContext, List<Task> tasks, RecyclerViewClickListener recyclerViewClickListener) {
+        this.mContext = mContext;
         this.tasks = tasks;
+        this.recyclerViewClickListener = recyclerViewClickListener;
     }
 
     @NonNull
@@ -32,7 +36,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
         myViewHolder.tvTask.setText(tasks.get(i).getTask_name());
         myViewHolder.tvTaskDesc.setText(tasks.get(i).getTask_desc());
         myViewHolder.tvTaskDate.setText(""+tasks.get(i).getTask_completedate());
@@ -41,6 +45,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             @Override
             public void onClick(View v) {
 
+                recyclerViewClickListener.recyclerViewListClicked(i,tasks.get(i).getTask_name());
 
 
             }

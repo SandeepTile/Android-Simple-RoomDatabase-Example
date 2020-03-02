@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.simpleroomdatabaseexample.Adapters.TaskAdapter;
 import com.example.simpleroomdatabaseexample.Entity.Task;
+import com.example.simpleroomdatabaseexample.Interface.RecyclerViewClickListener;
 import com.example.simpleroomdatabaseexample.R;
 import com.example.simpleroomdatabaseexample.Utils.DataBaseClient;
 
@@ -63,9 +65,45 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(List<Task> tasks) {
             super.onPostExecute(tasks);
 //            Log.e("taskDetails: " , tasks.get(tasks.size()-1).getTask_name());
-            TaskAdapter adapter = new TaskAdapter(MainActivity.this , tasks);
+            TaskAdapter adapter = new TaskAdapter(MainActivity.this , tasks,recyclerViewClickListener);
             recyclerView.setAdapter(adapter);
         }
     }
+
+    class deleteTask extends AsyncTask<String , Void , Void>{
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            DataBaseClient
+                    .getInstance(getApplicationContext())
+                    .getAppDataBase()
+                    .taskDao()
+                    .deleteByUserId(strings[0]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            new getTask().execute();
+
+        }
+    }
+
+
+    RecyclerViewClickListener recyclerViewClickListener=new RecyclerViewClickListener() {
+        @Override
+        public void recyclerViewListClicked(int position,String taskName) {
+
+            Toast.makeText(MainActivity.this, "Delete button clicked", Toast.LENGTH_SHORT).show();
+
+            new deleteTask().execute(taskName);
+
+            /*TaskAdapter adapter = new TaskAdapter(MainActivity.this , taskList,recyclerViewClickListener);
+            recyclerView.setAdapter(adapter);*/
+        }
+    };
 
 }

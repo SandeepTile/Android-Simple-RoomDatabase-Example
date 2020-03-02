@@ -16,15 +16,12 @@ public interface TaskDao {
     @Query("SELECT * FROM task")
     List<Task> getAllData();
 
-    @Query("DELETE FROM task WHERE id = :userId")
-    abstract void deleteByUserId(long userId);
+    @Query("DELETE FROM task WHERE task_name = :task_name")
+    abstract void deleteByUserId(String task_name);
 
     @Insert
     void insert(Task task);
 
-    @Delete
-    void delete(Task task);
-
-    @Update
-    void update(Task task);
+    @Query("UPDATE task SET `task_desc ` = :task_desc WHERE task_name= :task_name")
+    void update(String task_name,String task_desc);
 }
